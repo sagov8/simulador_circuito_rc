@@ -50,8 +50,8 @@ Asegúrate de tener Python instalado (versión 3.8+ recomendada).
 ### 2. Clonar el Repositorio
 
 ```bash
-git clone <URL_DE_TU_REPOSITORIO>
-cd <nombre-del-proyecto>
+git clone https://github.com/sagov8/simulador_circuito_rc.git
+cd /simulador_circuitos
 ```
 
 3. Instalar Dependencias
