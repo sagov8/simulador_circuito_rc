@@ -17,9 +17,9 @@ st.markdown(
     """
 )
 
-# ==========================
+
 #  SIDEBAR: PARÁMETROS
-# ==========================
+
 st.sidebar.header("Parámetros del circuito")
 
 R = st.sidebar.slider(
@@ -72,7 +72,7 @@ with col1:
 
     # Si tienes una imagen llamada circuito_rc.png en la misma carpeta, se mostrará
     try:
-        st.image("circuito_rc.png", caption="Circuito RC en serie", use_column_width=True)
+        st.image("circuito_rc.png", caption="Circuito RC en serie", width='stretch')
     except Exception:
         st.info("📷 Puedes agregar una imagen llamada `circuito_rc.png` en la carpeta del proyecto para mostrar el circuito.")
 
@@ -134,7 +134,7 @@ with col2:
             title="Evolución del voltaje en el capacitor"
         )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 # ==========================
 #  DESARROLLO TEÓRICO
