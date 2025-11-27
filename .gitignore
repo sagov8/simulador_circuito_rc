@@ -1,0 +1,46 @@
+# .gitignore generado: ignora PyCharm y el venv creado
+# Ignorar el entorno virtual específico creado en este proyecto
+venv-sc/
+
+# Ignorar configuraciones de PyCharm
+.idea/
+*.iml
+
+# Archivos de bytecode y caches de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+
+# Entornos virtuales comunes
+venv/
+.venv/
+ENV/
+env/
+
+# Distribución / empaquetado
+build/
+dist/
+*.egg-info/
+
+# Archivos de editor / sistema operativo
+.vscode/
+Thumbs.db
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Reportes de cobertura
+.coverage
+htmlcov/
+
+# Pipenv / Poetry
+Pipfile.lock
+
+# Logs
+*.log
+
+# Si necesitas ignorar otros IDEs o archivos, dímelo y lo ajusto.
+
