@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
+import math # Importar math para funciones como log10
 
 # Configuración básica de la página
 st.set_page_config(
@@ -68,31 +69,45 @@ Vc = q / C
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.subheader("Resumen del circuito")
+    st.subheader("Resumen del circuito y sus valores")
 
-    # Si tienes una imagen llamada circuito_rc.png en la misma carpeta, se mostrará
-    try:
-        st.image("circuito_rc.png", caption="Circuito RC en serie", width='stretch')
-    except Exception:
-        st.info("📷 Puedes agregar una imagen llamada `circuito_rc.png` en la carpeta del proyecto para mostrar el circuito.")
+    # --- INICIO DE LA VISUALIZACIÓN DINÁMICA ---
+    # Usaremos una representación esquemática del circuito
+    st.image("circuito_rc.png", caption="Esquema del Circuito RC en Serie", use_container_width=True)
 
+    # Mostrar los valores dinámicos
+    st.markdown("---")
+
+    st.markdown("**Valores actuales de los componentes:**")
+    st.markdown(f"* **Fuente ($V_S$):** ${E0:.2f}\\ V$")
+    st.markdown(f"* **Resistor ($R$):** ${R:,.0f}\\ \\Omega$")
+    st.markdown(f"* **Capacitor ($C$):** ${C_micro:.1f}\\ \\mu F$ (o ${C:.2e}\\ F$)")
+
+    st.markdown("---")
+    st.markdown("**Parámetros de respuesta:**")
+
+    # Formateo de la constante de tiempo (τ)
+    if tau >= 1:
+        tau_str = f"{tau:.2f}\\ s"
+    elif tau >= 1e-3:
+        tau_str = f"{tau*1e3:.2f}\\ ms"
+    else:
+        tau_str = f"{tau*1e6:.2f}\\ \\mu s"
+
+
+    st.markdown(f"* **Constante de tiempo ($\\tau$):** $\\tau = RC = {tau_str}$")
+    st.markdown(f"* **Carga máxima ($q_{{max}}$):** $q_{{max}} = E_0 C = {E0*C:.4e}\\ C$")
+    st.markdown(f"* **Voltaje final ($V_{{C,\\infty}}$):** ${E0:.2f}\\ V$")
+
+    # --- FIN DE LA VISUALIZACIÓN DINÁMICA ---
+
+    st.markdown("---")
     st.markdown("**Ecuación diferencial (Kirchhoff):**")
     st.latex(r"R \frac{dq}{dt} + \frac{1}{C}q = E_0")
 
     st.markdown("**Solución para la carga (condición inicial q(0)=0):**")
     st.latex(r"q(t) = E_0 C \left(1 - e^{-t/(RC)}\right)")
 
-    st.markdown("---")
-    st.markdown("**Constante de tiempo:**")
-    st.latex(r"\tau = RC")
-    st.write(f"τ = {tau:.4e} s")
-
-    st.markdown("**Carga máxima:**")
-    st.latex(r"q_{\max} = E_0 C")
-    st.write(f"q_max = {E0*C:.4e} C")
-
-    st.markdown("**Voltaje final en el capacitor:**")
-    st.write(f"V₍c,∞₎ = {E0:.2f} V")
 
 with col2:
     st.subheader("Curva de carga del capacitor")
@@ -134,16 +149,40 @@ with col2:
             title="Evolución del voltaje en el capacitor"
         )
 
-    st.plotly_chart(fig, width='stretch')
+    # Añadir línea de constante de tiempo para mayor claridad en la gráfica de voltaje
+    if magnitud.startswith("Voltaje"):
+        tau_Vc = E0 * (1 - np.exp(-1)) # Voltaje en t = tau
+        fig.add_vline(
+            x=tau,
+            line_dash="dash",
+            line_color="red",
+            annotation_text="τ",  # Texto simple para tau
+            annotation_position="top left",
+            annotation_font_size=14,
+            annotation_font_color="red"
+        )
+
+        # Anotación para Vc(tau)
+        fig.add_hline(
+            y=tau_Vc,
+            line_dash="dot",
+            line_color="red",
+            annotation_text=f"V<sub>c</sub>(τ) ≈ {tau_Vc:.2f} V",  # Usando <sub> para subíndice
+            annotation_position="bottom right",
+            annotation_font_size=14,
+            annotation_font_color="red"
+        )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 # ==========================
 #  DESARROLLO TEÓRICO
 # ==========================
-
+# ... (El resto del código del desarrollo teórico sigue igual) ...
 if mostrar_pasos:
     st.markdown("---")
     st.header("Desarrollo teórico (método del factor integrante)")
-
+    # ... (Pasos teóricos) ...
     st.markdown("**Paso 1.** Escribir la ecuación en forma estándar:")
     st.latex(r"\frac{dq}{dt} + \frac{1}{RC}q = \frac{E_0}{R}")
 
